@@ -18,21 +18,22 @@ void ShutDown::exec()
 	getCurTime();
 	if (!(getMon() < 9 && getMon() >= 4))
 	{
-		if (getWday() == 4 || getWday() == 5)
+		if (getWday() == 5 || getWday() == 6)
 		{
 
 		}
 		else
 		{
+			//system("shutdown -a");
 			std::string str = "shutdown -s -f -t ";
 			std::string targStr = std::to_string(computeSec());
-			//system((str + targStr).c_str());
 			std::ofstream batFile("test.bat");
 			if (batFile.is_open()) {
 				batFile << "@echo off\n";
 				batFile << "echo The system will be shut down at 23:47.\n";
 				batFile << "echo " + targStr + "\n";
 				batFile << str + targStr + "\n";
+				batFile << "echo exit \n";
 				batFile << "timeout /t 3 \n";
 				batFile << "exit\n";
 				batFile.close();
@@ -57,6 +58,7 @@ int ShutDown::getMon()
 
 int ShutDown::computeSec()
 {
+	const int day_sec = 86400;
 	std::vector<std::string> parts;
 	int pos = 0;
 	int found;
@@ -70,8 +72,8 @@ int ShutDown::computeSec()
 
 	int sum = -p.tm_sec + 1;
 	sum += (std::stoi(parts[0]) - p.tm_hour) * 3600;
-	sum += (std::stoi(parts[1]) - p.tm_min) * 60;
-	return sum > 0 ? sum : 0;
+	sum += (std::stoi(parts[1]) - (p.tm_min)) * 60;
+	return sum > 0 ? sum : day_sec + sum;
 }
 
 

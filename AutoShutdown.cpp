@@ -8,7 +8,8 @@
 int main()
 {
     //std::cout << "Hello World!\n";
-    ShutDown s("23:47");
+    std::string str = "23:45";
+    ShutDown s(str);
     AutoPowerOn();
     return 0;
 }
